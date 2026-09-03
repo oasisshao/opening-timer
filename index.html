@@ -11,11 +11,11 @@
 *{
     margin:0;
     padding:0;
-   *box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 body{
-  * min-height:100vh;
+    min-height:100vh;
     font-family:
     "Segoe UI",
     "Microsoft JhengHei",
@@ -141,11 +141,24 @@ body::before{
     transition:.3s;
 }
 
-.warning{
+#timer.warning{
 
-    color:#FF6B6B;
+ 
 
-    animation:pulse 1.5s infinite;
+color:#FF4D4F !important;
+
+ 
+
+animation:pulse 1.2s infinite;
+
+text-shadow:
+
+0 0 20px rgba(255,77,79,.50),
+
+0 0 40px rgba(255,77,79,.35),
+
+0 0 60px rgba(255,77,79,.20);
+
 }
 
 @keyframes pulse{
@@ -157,6 +170,27 @@ body::before{
     50%{
         transform:scale(1.02);
     }
+}
+
+#countdownNotice{
+
+    height:60px;
+
+    margin-top:5px;
+
+    font-size:2rem;
+
+    font-weight:800;
+
+    color:#FF4D4F;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.3s;
 }
 
 #finished{
@@ -347,6 +381,8 @@ button:active{
 
     <div id="timer">30:00</div>
 
+    <div id="countdownNotice"></div>
+
     <div id="finished">
         The Event Is Starting!｜活動正式開始！
     </div>
@@ -440,16 +476,52 @@ function updateDisplay(){
         progress+"%"
     );
 
-    if(
-        remaining <= 300 &&
-        remaining > 0
-    ){
-        timer.classList.add("warning");
-    }
-    else{
-        timer.classList.remove("warning");
-    }
+    const notice =
+document.getElementById(
+    "countdownNotice"
+);
+
+/* 最後 1 分鐘 */
+
+if(
+    remaining <= 60 &&
+    remaining > 0
+){
+
+    timer.classList.add(
+        "warning"
+    );
+
+    notice.innerHTML =
+        "🚨 Starting Soon | 活動即將開始";
 }
+
+/* 最後 5 分鐘 */
+
+else if(
+    remaining <= 300 &&
+    remaining > 60
+){
+
+    timer.classList.add(
+        "warning"
+    );
+
+    notice.innerHTML =
+        "⏳ Final 5 Minutes | 最後五分鐘";
+}
+
+/* 一般時間 */
+
+else{
+
+    timer.classList.remove(
+        "warning"
+    );
+
+    notice.innerHTML = "";
+}
+
 
 function tick(){
 
@@ -464,6 +536,12 @@ function tick(){
     updateDisplay();
 
     if(remaining <= 0){
+
+document
+.getElementById(
+    "countdownNotice"
+)
+.innerHTML = "";
 
         running = false;
 
